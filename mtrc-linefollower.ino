@@ -31,6 +31,8 @@
 int lastError = 0;
 int last_proportional = 0;
 int integral = 0;
+
+int duzcizgi = 0;
 QTRSensorsRC qtrrc((unsigned char[8]){ A7, A6, A5, A4, A3, A2, A1, A0 }, NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
@@ -49,7 +51,10 @@ void setup() {
 
 void loop() {
   unsigned int sensors[8];
-  int position = qtrrc.readLine(sensors, 1, 0);
+  int position = qtrrc.readLine(sensors, 1, 1);
+  if(position>7000){
+    duzcizgi = duzcizgi + 1;
+  }  
   int error = position - 3500;
 
   int motorSpeed = KP * error + KD * (error - lastError);
